@@ -41,7 +41,7 @@ pipeline {
 }
 
 def getManifestFolderPath(appName) {
-  return "${params.projectName}/${appName}"
+  return "${appName}"
   //return "/tmp/workspace/poc-santander/poc-santander-poc-pipeline-sync/${appName}"
 }
 
