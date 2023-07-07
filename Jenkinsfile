@@ -9,27 +9,28 @@ pipeline {
   agent {
     label 'maven'
   }
-  
-  stage('Deploy') {
-    steps {
-      echo 'Sync Deployment'
-      script {
-        openshift.withCluster() {
-          openshift.withProject(params.projectName) {
-            echo "Aplicativo a redesplegar: ${params.appName}"
-            sh 'ls -ltr'
-            
-            def manifestFolderPath = getManifestFolderPath(params.appName)
-            def manifestFiles = findManifestFiles(manifestFolderPath)
-            
-            manifestFiles.each { file ->
-              openshift.apply("--force", readFile(file: file))
-            }
-            
-            def deployment = openshift.selector("dc", params.appName)
-            timeout(5) {
-              openshift.selector("dc", params.appName).related('pods').untilEach(1) {
-                return (it.object().status.phase == "Running")
+  stages {
+    stage('Deploy') {
+      steps {
+        echo 'Sync Deployment'
+        script {
+          openshift.withCluster() {
+            openshift.withProject(params.projectName) {
+              echo "Aplicativo a redesplegar: ${params.appName}"
+              sh 'ls -ltr'
+              
+              def manifestFolderPath = getManifestFolderPath(params.appName)
+              def manifestFiles = findManifestFiles(manifestFolderPath)
+              
+              manifestFiles.each { file ->
+                openshift.apply("--force", readFile(file: file))
+              }
+              
+              def deployment = openshift.selector("dc", params.appName)
+              timeout(5) {
+                openshift.selector("dc", params.appName).related('pods').untilEach(1) {
+                  return (it.object().status.phase == "Running")
+                }
               }
             }
           }
