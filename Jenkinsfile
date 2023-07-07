@@ -21,7 +21,7 @@ pipeline {
               def manifestFolderPath = getManifestFolderPath(params.appName)
               sh " ls -ltr /tmp/workspace/poc-santander/poc-santander-poc-pipeline-sync/javaapp"
 
-              def manifestFiles = readFiles(glob: "${manifestFolderPath}/*.yaml")
+              def manifestFiles = findFiles(glob: "${manifestFolderPath}/*.yaml")
               
               echo "Contenido de manifestFiles:"
               echo manifestFiles
