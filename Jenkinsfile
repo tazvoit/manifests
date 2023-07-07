@@ -19,21 +19,23 @@ pipeline {
               sh " ls -ltr"
               sh " pwd"
               def manifestFolderPath = getManifestFolderPath(params.appName)
-              sh " ls -ltr /tmp/workspace/poc-santander/poc-santander-poc-pipeline-sync/javaapp"
-
-              def manifestFiles = findFiles(glob: "${manifestFolderPath}/*.yaml")
-              
-              echo "Contenido de manifestFiles:"
-              echo manifestFiles
-              
-              manifestFiles.each { fileContent ->
-                openshift.apply(fileContent)
-              }
-              
-              def deployment = openshift.selector("dc", params.appName)
-              timeout(5) {
-                openshift.selector("dc", params.appName).related('pods').untilEach(1) {
-                  return (it.object().status.phase == "Running")
+              // Ruta del directorio al que deseas cambiarte
+              def targetDirectory = manifestFolderPath
+              // Cambiarse al directorio especificado
+              dir(targetDirectory) {
+                sh " ls -ltr"
+                sh " pwd"
+                def manifestFiles = findFiles(glob: "**/*.yaml")
+                echo "Contenido de manifestFiles:"
+                echo manifestFiles
+                manifestFiles.each { fileContent ->
+                  openshift.apply("--force", fileContent)
+                }
+                def deployment = openshift.selector("dc", params.appName)
+                timeout(5) {
+                  openshift.selector("dc", params.appName).related('pods').untilEach(1) {
+                    return (it.object().status.phase == "Running")
+                  }
                 }
               }
             }
