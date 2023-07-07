@@ -20,10 +20,14 @@ pipeline {
               sh " pwd"
               def manifestFolderPath = getManifestFolderPath(params.appName)
               sh " ls -ltr /tmp/workspace/poc-santander/poc-santander-poc-pipeline-sync/javaapp"
-              def manifestFiles = findManifestFiles(manifestFolderPath)
+
+              def manifestFiles = readFiles(glob: "${manifestFolderPath}/*.yaml")
               
-              manifestFiles.each { file ->
-                openshift.apply("--force", readFile(file: file))
+              echo "Contenido de manifestFiles:"
+              echo manifestFiles
+              
+              manifestFiles.each { fileContent ->
+                openshift.apply(fileContent)
               }
               
               def deployment = openshift.selector("dc", params.appName)
@@ -39,23 +43,6 @@ pipeline {
     }
   }
 }
-
 def getManifestFolderPath(appName) {
   return "/tmp/workspace/poc-santander/poc-santander-poc-pipeline-sync/${appName}"
-}
-
-def findManifestFiles(folderPath) {
-  def manifestFiles = []
-  dir(folderPath) {
-    manifestFiles = findFiles(glob: '**/*.yaml')
-  }
- 
-  echo "Contenido de manifestFiles:"
-  echo manifestFiles
-  
-  //def manifestFiles = findFiles(glob: "${folderPath}/*.yaml")
-  if (manifestFiles.empty) {
-    throw new RuntimeException("No YAML files found in ${folderPath}")
-  }
-  return manifestFiles.collect { it.path }
 }
