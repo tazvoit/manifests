@@ -26,10 +26,9 @@ pipeline {
                 sh " ls -ltr"
                 sh " pwd"
                 def manifestFiles = findFiles(glob: "**/*.yaml")
-                echo "Contenido de manifestFiles:"
-                echo manifestFiles
-                manifestFiles.each { fileContent ->
-                  openshift.apply("--force", fileContent)
+                echo "Cantidad de archivos encontrados: ${manifestFiles.size()}"
+                manifestFiles.each { file ->
+                  openshift.apply("--force", file)
                 }
                 def deployment = openshift.selector("dc", params.appName)
                 timeout(5) {
