@@ -16,7 +16,7 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject(params.projectName) {
               echo "Aplicativo a redesplegar: ${params.appName}"
-              sh 'cd ${params.appName}; ls -ltr'
+              sh 'cd params.appName; ls -ltr'
               
               def manifestFolderPath = getManifestFolderPath(params.appName)
               def manifestFiles = findManifestFiles(manifestFolderPath)
