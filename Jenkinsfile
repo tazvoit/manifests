@@ -1,11 +1,10 @@
 #! /usr/bin/env groovy
 
-parameters {
-  string(name: 'projectName', description: 'Name of the project', defaultValue: 'poc-santander')
-  string(name: 'appName', description: 'Name of the application', defaultValue: 'javaapp')
-}
-
 pipeline {
+  parameters {
+    string(name: 'projectName', description: 'Name of the project', defaultValue: 'poc-santander')
+    string(name: 'appName', description: 'Name of the application', defaultValue: 'javaapp')
+  }
   agent {
     label 'maven'
   }
