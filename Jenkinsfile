@@ -16,7 +16,6 @@ pipeline {
           openshift.withCluster() {
             openshift.withProject(params.projectName) {
               echo "Aplicativo a redesplegar: ${params.appName}"
-
               sh " ls -ltr"
               sh " pwd"
               def manifestFolderPath = getManifestFolderPath(params.appName)
@@ -46,7 +45,7 @@ def getManifestFolderPath(appName) {
 }
 
 def findManifestFiles(folderPath) {
-  def manifestFiles = findFiles(glob: "**/*.yaml")
+  def manifestFiles = findFiles(glob: "${folderPath}/*.yaml")
   if (manifestFiles.empty) {
     throw new RuntimeException("No YAML files found in ${folderPath}")
   }
