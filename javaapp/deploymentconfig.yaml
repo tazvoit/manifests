@@ -1,0 +1,66 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: javaapp
+  namespace: poc-santander
+  labels:
+    app: javaapp
+    app.kubernetes.io/component: javaapp
+    app.kubernetes.io/instance: javaapp
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - javaapp
+        from:
+          kind: ImageStreamTag
+          namespace: poc-santander
+          name: 'javaapp:latest'
+        lastTriggeredImage: >-
+          image-registry.openshift-image-registry.svc:5000/poc-santander/javaapp@sha256:8cc8dc166b3f139fcf14f91c51e9c48ce5c5ce3a81093be406c588a0ee3e5b86
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    deploymentconfig: javaapp
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deploymentconfig: javaapp
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+    spec:
+      containers:
+        - name: javaapp
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/poc-santander/javaapp@sha256:8cc8dc166b3f139fcf14f91c51e9c48ce5c5ce3a81093be406c588a0ee3e5b86
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler

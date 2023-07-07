@@ -1,0 +1,20 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: javaapp
+  namespace: poc-santander
+  labels:
+    app: javaapp
+    app.kubernetes.io/component: javaapp
+    app.kubernetes.io/instance: javaapp
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: javaapp-poc-santander.apps.ocp.nuup.rocks
+  to:
+    kind: Service
+    name: javaapp
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  wildcardPolicy: None
