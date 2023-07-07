@@ -45,7 +45,7 @@ def getManifestFolderPath(appName) {
 }
 
 def findManifestFiles(folderPath) {
-  dir('${folderPath}') {
+  dir(folderPath) {
     def manifestFiles = findFiles(glob: '**/*.yaml')
   }
   //def manifestFiles = findFiles(glob: "${folderPath}/*.yaml")
