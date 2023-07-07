@@ -29,7 +29,8 @@ pipeline {
                 echo "Cantidad de archivos encontrados: ${manifestFiles.size()}"
                 manifestFiles.each { file ->
                   //openshift.apply("--force", readFile(file: file))
-                  openshift.apply("--force", file)
+                  sh "oc apply --force -f ${file}"
+                  //openshift.apply("--force", file)
                 }
                 def deployment = openshift.selector("dc", params.appName)
                 timeout(5) {
