@@ -20,6 +20,7 @@ pipeline {
               sh " ls -ltr"
               sh " pwd"
               def manifestFolderPath = getManifestFolderPath(params.appName)
+              sh " ls -ltr /tmp/workspace/poc-santander/poc-santander-poc-pipeline-sync/javaapp"
               def manifestFiles = findManifestFiles(manifestFolderPath)
               
               manifestFiles.each { file ->
