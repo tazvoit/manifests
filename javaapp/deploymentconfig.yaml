@@ -31,7 +31,7 @@ spec:
           name: 'javaapp:latest'
         lastTriggeredImage: >-
           image-registry.openshift-image-registry.svc:5000/poc-santander/javaapp@sha256:8cc8dc166b3f139fcf14f91c51e9c48ce5c5ce3a81093be406c588a0ee3e5b86
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 10
   test: false
   selector:
