@@ -45,7 +45,7 @@ def getManifestFolderPath(appName) {
 }
 
 def findManifestFiles(folderPath) {
-  def manifestFiles = findFiles(glob: "${folderPath}/*.yaml")
+  def manifestFiles = findFiles(glob: "**/*.yaml")
   if (manifestFiles.empty) {
     throw new RuntimeException("No YAML files found in ${folderPath}")
   }
