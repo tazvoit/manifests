@@ -49,6 +49,10 @@ def findManifestFiles(folderPath) {
   dir(folderPath) {
     manifestFiles = findFiles(glob: '**/*.yaml')
   }
+ 
+  echo "Contenido de manifestFiles:"
+  echo manifestFiles
+  
   //def manifestFiles = findFiles(glob: "${folderPath}/*.yaml")
   if (manifestFiles.empty) {
     throw new RuntimeException("No YAML files found in ${folderPath}")
