@@ -26,7 +26,7 @@ pipeline {
                 sh " ls -ltr"
                 sh " pwd"
                 def manifestFiles = findFiles(glob: "**/*.yaml")
-                echo "Cantidad de archivos encontrados: ${manifestFiles.size()}"
+                echo "Cantidad de archivos encontrados: ${manifestFiles.size()} en ${targetDirectory}"
                 if (manifestFiles.empty) {
                   echo "No se encontraron archivos YAML"
                   return // Finalizar el pipeline
