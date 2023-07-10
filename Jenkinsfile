@@ -28,7 +28,7 @@ pipeline {
                 def manifestFiles = findFiles(glob: "**/*.yaml")
                 echo "Cantidad de archivos encontrados: ${manifestFiles.size()}"
                 if (manifestFiles.empty) {
-                  echo "No se encontraron archivos YAML en ${targetDirectory}"
+                  echo "No se encontraron archivos YAML"
                   return // Finalizar el pipeline
                 }
                 manifestFiles.each { file ->
