@@ -27,6 +27,10 @@ pipeline {
                 sh " pwd"
                 def manifestFiles = findFiles(glob: "**/*.yaml")
                 echo "Cantidad de archivos encontrados: ${manifestFiles.size()}"
+                if (manifestFiles.empty) {
+                  echo "No se encontraron archivos YAML en ${targetDirectory}"
+                  return // Finalizar el pipeline
+                }
                 manifestFiles.each { file ->
                   //openshift.apply("--force", readFile(file: file))
                   sh "oc apply --force -f ${file}"
